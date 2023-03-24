@@ -15,55 +15,60 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    flavorDimensions "dimen"
-    productFlavors {
-        vDevelop_ {
-            applicationId "com.example.develop.test"
-            buildConfigField "boolean", "TEST_AD", "false"
-            buildConfigField "boolean", "PURCHASED", "false"
-            dimension "dimen"
-            versionName "develop"
-
-
-            def addConstantTo = { target, constantName, constantValue ->
-                target.manifestPlaceholders += [(constantName): constantValue]
-                target.buildConfigField "String", "${constantName}", "\"${constantValue}\""
-            }
-            addConstantTo(owner, "APP_ID", "ca-app-pub-3940256099942544~3347511713")
-
-            addConstantTo(owner, "inter_splash", "ca-app-pub-3940256099942544/1033173712")
-
-        }
-
-        vOfficial_ {
-            applicationId "com.masterlibs.basestructor"
-
-            buildConfigField "boolean", "TEST_AD", "false"
-            buildConfigField "boolean", "PURCHASED", "false"
-            dimension "dimen"
-
-            def addConstantTo = { target, constantName, constantValue ->
-                target.manifestPlaceholders += [(constantName): constantValue]
-                target.buildConfigField "String", "${constantName}", "\"${constantValue}\""
-            }
-            addConstantTo(owner, "APP_ID", "ca-app-pub-3940256099942544~3347511713")
-
-            addConstantTo(owner, "inter_splash", "ca-app-pub-3940256099942544/1033173712")
-        }
-    }
-
-
+//    flavorDimensions "dimen"
+//    productFlavors {
+//        vDevelop_ {
+//            applicationId "com.example.develop.test"
+//            buildConfigField "boolean", "TEST_AD", "false"
+//            buildConfigField "boolean", "PURCHASED", "false"
+//            dimension "dimen"
+//            versionName "develop"
+//
+//
+//            def addConstantTo = { target, constantName, constantValue ->
+//                target.manifestPlaceholders += [(constantName): constantValue]
+//                target.buildConfigField "String", "${constantName}", "\"${constantValue}\""
+//            }
+//            addConstantTo(owner, "APP_ID", "ca-app-pub-3940256099942544~3347511713")
+//
+//            addConstantTo(owner, "inter_splash", "ca-app-pub-3940256099942544/1033173712")
+//
+//        }
+//
+//        vOfficial_ {
+//            applicationId "com.masterlibs.basestructor"
+//
+//            buildConfigField "boolean", "TEST_AD", "false"
+//            buildConfigField "boolean", "PURCHASED", "false"
+//            dimension "dimen"
+//
+//            def addConstantTo = { target, constantName, constantValue ->
+//                target.manifestPlaceholders += [(constantName): constantValue]
+//                target.buildConfigField "String", "${constantName}", "\"${constantValue}\""
+//            }
+//            addConstantTo(owner, "APP_ID", "ca-app-pub-3940256099942544~3347511713")
+//
+//            addConstantTo(owner, "inter_splash", "ca-app-pub-3940256099942544/1033173712")
+//        }
+//    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-
-        debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
     }
+
+//    buildTypes {
+////        release {
+////            minifyEnabled false
+////            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+////        }
+//
+//        debug {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//        }
+//    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
