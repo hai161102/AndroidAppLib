@@ -12,6 +12,9 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+        multiDexEnabled false
+
+
     }
 
     buildTypes {
@@ -40,8 +43,9 @@ dependencies {
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
     implementation 'com.android.billingclient:billing:4.1.0'
     implementation 'androidx.lifecycle:lifecycle-process:2.4.1'
-
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     var room_version = "2.5.0"
+    implementation 'com.android.support:multidex:1.0.3'
 
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
