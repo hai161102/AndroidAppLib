@@ -2,9 +2,9 @@ package com.haiprj.android_app_lib;
 
 import android.app.Application;
 
-import com.haiprj.android_app_lib.admobs.AdmobManager;
-import com.haiprj.android_app_lib.admobs.AppOpenManager;
-import com.haiprj.android_app_lib.admobs.PurchaseManager;
+import com.haiprj.android_app_lib.my_admobs.AdmobManager;
+import com.haiprj.android_app_lib.my_admobs.AppOpenManager;
+import com.haiprj.android_app_lib.my_admobs.PurchaseManager;
 
 public abstract class MyApplication extends Application {
     @Override

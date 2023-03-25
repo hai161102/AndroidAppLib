@@ -1,4 +1,4 @@
-package com.haiprj.android_app_lib.admobs;
+package com.haiprj.android_app_lib.my_admobs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -208,34 +208,11 @@ public class AppOpenManager implements Application.ActivityLifecycleCallbacks, L
             if (appResumeAd != null) {
                 appResumeAd.show(currentActivity);
             }
-
-//            Dialog dialog = null;
-//            try {
-//                dialog = new PrepareLoadingAdsDialog(currentActivity);
-//                try {
-//                    dialog.show();
-//                } catch (Exception e) {
-//                    return;
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            final Dialog finalDialog = dialog;
-//            new Handler().postDelayed(() -> {
-//                if (fullScreenContentCallback != null) {
-//                    appResumeAd.setFullScreenContentCallback(fullScreenContentCallback);
-//                }
-//                if (appResumeAd != null) {
-//                    appResumeAd.show(currentActivity);
-//                }
-//                if (finalDialog != null) {
-//                    finalDialog.dismiss();
-//                }
-//            }, 800);
         }
     }
 
 
+    @SuppressWarnings("rawtypes")
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void onResume() {
         if (!isAppResumeEnabled /*|| !AdsConfigManager.getInstance().hasAds(R.string.oa_return)*/) {

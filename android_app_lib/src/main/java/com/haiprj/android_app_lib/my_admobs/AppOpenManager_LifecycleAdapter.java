@@ -3,12 +3,11 @@
 // (powered by FernFlower decompiler)
 //
 
-package com.haiprj.android_app_lib.admobs;
+package com.haiprj.android_app_lib.my_admobs;
 
 import android.annotation.SuppressLint;
 
 import androidx.lifecycle.GeneratedAdapter;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Lifecycle.Event;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MethodCallsLogger;
@@ -21,7 +20,7 @@ public class AppOpenManager_LifecycleAdapter implements GeneratedAdapter {
         this.mReceiver = receiver;
     }
 
-    public void callMethods(LifecycleOwner owner, Lifecycle.Event event, boolean onAny, MethodCallsLogger logger) {
+    public void callMethods(LifecycleOwner owner, Event event, boolean onAny, MethodCallsLogger logger) {
         boolean hasLogger = logger != null;
         if (!onAny) {
             if (event == Event.ON_START) {

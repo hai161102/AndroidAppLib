@@ -1,5 +1,5 @@
 
-package com.haiprj.android_app_lib.admobs;
+package com.haiprj.android_app_lib.my_admobs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

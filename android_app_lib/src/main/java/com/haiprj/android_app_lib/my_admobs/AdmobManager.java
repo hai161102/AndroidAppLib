@@ -1,9 +1,8 @@
-package com.haiprj.android_app_lib.admobs;
+package com.haiprj.android_app_lib.my_admobs;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.os.Handler;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -37,22 +36,16 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.gms.ads.nativead.NativeAdView;
 import com.haiprj.android_app_lib.R;
-import com.haiprj.android_app_lib.admobs.dialog.PrepareLoadingAdsDialog;
 import com.haiprj.android_app_lib.interfaces.AdCallback;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
+import java.util.Objects;
 
 public class AdmobManager {
-    private static final String TAG = AdmobManager.class.getName();
-    private static AdmobManager instance;
-    private final Handler handler = new Handler();
-    private PrepareLoadingAdsDialog dialog;
 
-
-    public void setTimeReloadAds(long timeReloadAds) {
-    }
+    public static AdmobManager instance;
 
     public static AdmobManager getInstance() {
         if (instance == null) {
@@ -62,7 +55,6 @@ public class AdmobManager {
     }
 
     private AdmobManager() {
-
     }
 
     public void init(Context context, String deviceID) {
@@ -76,13 +68,10 @@ public class AdmobManager {
         }
     }
 
+    @SuppressLint("VisibleForTests")
     public AdRequest getAdRequest() {
         AdRequest.Builder builder = new AdRequest.Builder();
         return builder.build();
-    }
-
-    public void destroyTimeout() {
-        handler.removeCallbacksAndMessages(null);
     }
 
     public void loadInterAds(Activity context, String id, AdCallback callback) {
@@ -95,14 +84,12 @@ public class AdmobManager {
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                 super.onAdFailedToLoad(loadAdError);
                 callback.onAdFailedToLoad(loadAdError);
-                Log.d("TAG2", "onAdFailedToLoad: ");
             }
 
             @Override
             public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
                 super.onAdLoaded(interstitialAd);
                 callback.interCallback(interstitialAd);
-                Log.d("TAG2", "onAdLoaded: ");
             }
         });
     }
@@ -128,10 +115,8 @@ public class AdmobManager {
             @Override
             public void onAdDismissedFullScreenContent() {
                 // Called when fullscreen content is dismissed.
-                Log.d("TAG", "The ad was dismissed.");
                 if (AppOpenManager.getInstance().isInitialized()) {
                     AppOpenManager.getInstance().enableAppResume();
-                    Log.d(TAG, "enableAppResume: ");
                 }
                 if (callback != null) {
                     callback.onAdClosed();
@@ -139,7 +124,7 @@ public class AdmobManager {
             }
 
             @Override
-            public void onAdFailedToShowFullScreenContent(AdError adError) {
+            public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
                 Log.d("TAG", "The ad failed to show.");
             }
 
@@ -155,29 +140,16 @@ public class AdmobManager {
     private void showInterstitialAd(Activity context, final InterstitialAd mInterstitialAd, AdCallback callback) {
         if (ProcessLifecycleOwner.get().getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)
                 && mInterstitialAd != null) {
-//            try {
-//                dialog = new PrepareLoadingAdsDialog(context);
-//                dialog.show();
-//            } catch (Exception e) {
-//                Toast.makeText(context, "error", Toast.LENGTH_SHORT).show();
-//                dialog = null;
-//                e.printStackTrace();
-//            }
             if (AppOpenManager.getInstance().isInitialized()) {
                 AppOpenManager.getInstance().disableAppResume();
-                Log.d(TAG, "disableAppResume: ");
             }
             mInterstitialAd.show(context);
-//            if (dialog != null) {
-//                dialog.dismiss();
-//            }
         } else {
             if (callback != null) {
                 callback.onAdClosed();
             }
         }
     }
-
     public void loadBanner(final Activity mActivity, String id) {
         final FrameLayout adContainer = mActivity.findViewById(R.id.banner_container);
         final ShimmerFrameLayout containerShimmer = mActivity.findViewById(R.id.shimmer_container);
@@ -221,6 +193,7 @@ public class AdmobManager {
         }
     }
 
+    @SuppressLint("VisibleForTests")
     private AdSize getAdSize(Activity mActivity) {
         Display display = mActivity.getWindowManager().getDefaultDisplay();
         DisplayMetrics outMetrics = new DisplayMetrics();
@@ -294,29 +267,25 @@ public class AdmobManager {
 
 
     private void populateUnifiedNativeAdView(NativeAd nativeAd, NativeAdView adView) {
-//        MediaView mediaView = adView.findViewById(R.id.ad_media);
-//        adView.setMediaView(mediaView);
 
         adView.setHeadlineView(adView.findViewById(R.id.ad_headline));
         adView.setBodyView(adView.findViewById(R.id.ad_body));
         adView.setCallToActionView(adView.findViewById(R.id.ad_call_to_action));
         adView.setIconView(adView.findViewById(R.id.ad_app_icon));
-//        adView.setPriceView(adView.findViewById(R.id.ad_price));
         adView.setStarRatingView(adView.findViewById(R.id.ad_stars));
-//        adView.setStoreView(adView.findViewById(R.id.ad_store));
         adView.setAdvertiserView(adView.findViewById(R.id.ad_advertiser));
 
         try {
-            ((TextView) adView.getHeadlineView()).setText(nativeAd.getHeadline());
+            ((TextView) Objects.requireNonNull(adView.getHeadlineView())).setText(nativeAd.getHeadline());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         try {
             if (nativeAd.getBody() == null) {
-                adView.getBodyView().setVisibility(View.INVISIBLE);
+                Objects.requireNonNull(adView.getBodyView()).setVisibility(View.INVISIBLE);
             } else {
-                adView.getBodyView().setVisibility(View.VISIBLE);
+                Objects.requireNonNull(adView.getBodyView()).setVisibility(View.VISIBLE);
                 ((TextView) adView.getBodyView()).setText(nativeAd.getBody());
             }
         } catch (Exception e) {
@@ -325,9 +294,9 @@ public class AdmobManager {
 
         try {
             if (nativeAd.getCallToAction() == null) {
-                adView.getCallToActionView().setVisibility(View.INVISIBLE);
+                Objects.requireNonNull(adView.getCallToActionView()).setVisibility(View.INVISIBLE);
             } else {
-                adView.getCallToActionView().setVisibility(View.VISIBLE);
+                Objects.requireNonNull(adView.getCallToActionView()).setVisibility(View.VISIBLE);
                 ((TextView) adView.getCallToActionView()).setText(nativeAd.getCallToAction());
             }
         } catch (Exception e) {
@@ -336,9 +305,9 @@ public class AdmobManager {
 
         try {
             if (nativeAd.getIcon() == null) {
-                adView.getIconView().setVisibility(View.GONE);
+                Objects.requireNonNull(adView.getIconView()).setVisibility(View.GONE);
             } else {
-                ((ImageView) adView.getIconView()).setImageDrawable(
+                ((ImageView) Objects.requireNonNull(adView.getIconView())).setImageDrawable(
                         nativeAd.getIcon().getDrawable());
                 adView.getIconView().setVisibility(View.VISIBLE);
             }
@@ -348,9 +317,9 @@ public class AdmobManager {
 
         try {
             if (nativeAd.getPrice() == null) {
-                adView.getPriceView().setVisibility(View.INVISIBLE);
+                Objects.requireNonNull(adView.getPriceView()).setVisibility(View.INVISIBLE);
             } else {
-                adView.getPriceView().setVisibility(View.VISIBLE);
+                Objects.requireNonNull(adView.getPriceView()).setVisibility(View.VISIBLE);
                 ((TextView) adView.getPriceView()).setText(nativeAd.getPrice());
             }
         } catch (Exception e) {
@@ -359,9 +328,9 @@ public class AdmobManager {
 
         try {
             if (nativeAd.getStore() == null) {
-                adView.getStoreView().setVisibility(View.INVISIBLE);
+                Objects.requireNonNull(adView.getStoreView()).setVisibility(View.INVISIBLE);
             } else {
-                adView.getStoreView().setVisibility(View.VISIBLE);
+                Objects.requireNonNull(adView.getStoreView()).setVisibility(View.VISIBLE);
                 ((TextView) adView.getStoreView()).setText(nativeAd.getStore());
             }
         } catch (Exception e) {
@@ -370,9 +339,9 @@ public class AdmobManager {
 
         try {
             if (nativeAd.getStarRating() == null) {
-                adView.getStarRatingView().setVisibility(View.INVISIBLE);
+                Objects.requireNonNull(adView.getStarRatingView()).setVisibility(View.INVISIBLE);
             } else {
-                ((RatingBar) adView.getStarRatingView())
+                ((RatingBar) Objects.requireNonNull(adView.getStarRatingView()))
                         .setRating(nativeAd.getStarRating().floatValue());
                 adView.getStarRatingView().setVisibility(View.VISIBLE);
             }
@@ -382,9 +351,9 @@ public class AdmobManager {
 
         try {
             if (nativeAd.getAdvertiser() == null) {
-                adView.getAdvertiserView().setVisibility(View.GONE);
+                Objects.requireNonNull(adView.getAdvertiserView()).setVisibility(View.GONE);
             } else {
-                ((TextView) adView.getAdvertiserView()).setText(nativeAd.getAdvertiser());
+                ((TextView) Objects.requireNonNull(adView.getAdvertiserView())).setText(nativeAd.getAdvertiser());
                 adView.getAdvertiserView().setVisibility(View.VISIBLE);
             }
         } catch (Exception e) {
